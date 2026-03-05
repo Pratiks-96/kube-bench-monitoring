@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-bench-exporter
+  namespace: security
+  labels:
+    app: kube-bench-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-bench-exporter
+  template:
+    metadata:
+      labels:
+        app: kube-bench-exporter
+    spec:
+      containers:
+      - name: exporter
+        image: pratik6958/kube-bench-exporter:latest
+        ports:
+        - containerPort: 8080
