@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kube-bench-alert
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  groups:
+  - name: kube-bench.rules
+    rules:
+    - alert: KubernetesSecurityIssue
+      expr: kube_bench_fail > 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Kubernetes Security Misconfiguration"
+        description: "kube-bench detected CIS benchmark failure"
