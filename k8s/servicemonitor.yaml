@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: kube-bench-monitor
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: kube-bench-exporter
+  namespaceSelector:
+    matchNames:
+      - security
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
