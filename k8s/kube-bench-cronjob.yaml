@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: kube-bench-scan
+  namespace: security
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: kube-bench
+        spec:
+          hostPID: true
+          restartPolicy: Never
+          containers:
+          - name: kube-bench
+            image: aquasec/kube-bench:latest
+            command:
+            - "/bin/sh"
+            - "-c"
+            - |
+              kube-bench --json > /output/results.json
+              echo "scan completed"
+            volumeMounts:
+            - name: output
+              mountPath: /output
+          volumes:
+          - name: output
+            emptyDir: {}
